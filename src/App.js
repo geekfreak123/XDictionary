@@ -1,6 +1,8 @@
+import "./styles.css";
+
 import React, { useState } from "react";
 
-const dictionary = [
+const dictionaryData = [
   {
     word: "React",
     meaning: "A JavaScript library for building user interfaces.",
@@ -9,44 +11,40 @@ const dictionary = [
   { word: "State", meaning: "An object that stores data for a component." },
 ];
 
-const XDictionary = () => {
+export default function App() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [definition, setDefinition] = useState("");
+  const [searchResult, setSearchResult] = useState("");
 
   const handleSearch = () => {
-    const lowerCaseTerm = searchTerm.toLowerCase();
-    const foundWord = dictionary.find(
-      (entry) => entry.word.toLowerCase() === lowerCaseTerm,
+    const foundWord = dictionaryData.find(
+      (entry) => entry.word.toLowerCase() === searchTerm.toLowerCase(),
     );
-    if (foundWord) {
-      setDefinition(foundWord.meaning);
-    } else {
-      setDefinition("Word not found in the dictionary.");
-    }
-  };
 
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
+    if (foundWord) {
+      setSearchResult(foundWord.meaning);
+    } else {
+      setSearchResult("Word not found in the dictionary.");
+    }
   };
 
   return (
     <div>
       <h1>Dictionary App</h1>
+      <input
+        type="text"
+        placeholder="Enter a word..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <button onClick={handleSearch}>Search</button>
       <div>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleChange}
-          placeholder="Enter search term"
-        />
-        <button onClick={handleSearch}>Search</button>
-        <p>
-          <strong>Definition:</strong>
-        </p>
+        <h2>Definition:</h2>
+        {searchResult && (
+          <div>
+            <p>{searchResult}</p>
+          </div>
+        )}
       </div>
-      {definition !== "" && <p> {definition}</p>}
     </div>
   );
-};
-
-export default XDictionary;
+}
